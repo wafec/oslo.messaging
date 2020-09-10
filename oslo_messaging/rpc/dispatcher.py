@@ -239,6 +239,7 @@ class RPCDispatcher(dispatcher.DispatcherBase):
         new_args = dict()
         for argname, arg in args.items():
             new_args[argname] = self.serializer.deserialize_entity(ctxt, arg)
+        new_args = self._test_args(endpoint, method, new_args)
         func = getattr(endpoint, method)
         result = func(ctxt, **new_args)
         return self.serializer.serialize_entity(ctxt, result)
