@@ -221,14 +221,15 @@ class RPCDispatcher(dispatcher.DispatcherBase):
         return utils.version_is_compatible(endpoint_version, version)
 
     def _test_args(self, endpoint, method, args):
-        from wafec.fi.hypothesis.utils import make_custom_wrapper_client
-
         try:
+            from wafec.fi.hypothesis.utils import make_custom_wrapper_client
+
             service = type(endpoint).__name__
             new_args = {}
             for argname, arg in args.items():
                 new_args[argname] = make_custom_wrapper_client(arg,
                                                                obj_path='{}.{}.{}'.format(service, method, argname))
+            LOG.debug('TestWrapper: OK')
             return new_args
         except Exception as e:
             LOG.error('Failed to wrap: {}'.format(str(e)))
