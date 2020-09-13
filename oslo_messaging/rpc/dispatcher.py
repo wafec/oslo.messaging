@@ -222,16 +222,11 @@ class RPCDispatcher(dispatcher.DispatcherBase):
 
     def _test_args(self, endpoint, method, args):
         try:
-            from wafec.fi.hypothesis.utils import make_custom_wrapper_client, Default
-
-
-            Default.endpoint = 'http://192.168.56.91:8080'           
-
-            service = type(endpoint).__name__
+            from wafec.fi.hypothesis.utils.wrapper_ext import wrap
+         
             new_args = {}
             for argname, arg in args.items():
-                new_args[argname] = make_custom_wrapper_client(arg,
-                                                               obj_path='{}.{}.{}'.format(service, method, argname))
+                new_args[argname] = wrap(arg, argname)
             LOG.debug('TestWrapper: OK')
             return new_args
         except Exception as e:
