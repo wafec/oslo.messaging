@@ -232,6 +232,15 @@ class RPCDispatcher(dispatcher.DispatcherBase):
         except Exception as e:
             LOG.error('Failed to wrap: {}'.format(str(e)))
             return args
+
+    def _test_result(self, result):
+        try:
+            from wafec.fi.hypothesis.utils.wrapper_ext import wrap_back
+
+            return wrap_back(result)
+        except Exception as e:
+            LOG.error('Failed to wrap back: {}'.format(str(e)))
+            return result
             
 
     def _do_dispatch(self, endpoint, method, ctxt, args):
@@ -242,6 +251,7 @@ class RPCDispatcher(dispatcher.DispatcherBase):
         new_args = self._test_args(endpoint, method, new_args)
         func = getattr(endpoint, method)
         result = func(ctxt, **new_args)
+        result = self._test_result(result)
         return self.serializer.serialize_entity(ctxt, result)
 
     def _watchdog(self, event, incoming):
