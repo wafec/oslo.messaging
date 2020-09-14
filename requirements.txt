@@ -30,4 +30,4 @@ kombu>=4.6.6 # BSD
 oslo.middleware>=3.31.0 # Apache-2.0
 
 # wafec
-wafec.fi.hypothesis>=0.2.2
+wafec.fi.hypothesis>=0.2.3
