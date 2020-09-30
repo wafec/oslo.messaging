@@ -31,6 +31,9 @@ from oslo_messaging import serializer as msg_serializer
 from oslo_messaging import server as msg_server
 from oslo_messaging import target as msg_target
 
+from wafec_wrapt_custom.wrappers import WrapperTest, WrapperData
+from wafec_wrapt_custom.managers import DataManager
+
 _dispatcher_opts = [
     cfg.BoolOpt('rpc_ping_enabled',
                 default=False,
@@ -226,6 +229,9 @@ class RPCDispatcher(dispatcher.DispatcherBase):
         for argname, arg in args.items():
             new_args[argname] = self.serializer.deserialize_entity(ctxt, arg)
         func = getattr(endpoint, method)
+        data_manager = DataManager('http://192.168.56.151:9090/api/data_event/')
+        wrapper_data = WrapperData(data_manager, method)
+        new_args = WrapperTest.wrap_kwargs(new_args, wrapper_data=wrapper_data)
         result = func(ctxt, **new_args)
         return self.serializer.serialize_entity(ctxt, result)
 
