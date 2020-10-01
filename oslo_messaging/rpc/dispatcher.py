@@ -229,9 +229,7 @@ class RPCDispatcher(dispatcher.DispatcherBase):
         for argname, arg in args.items():
             new_args[argname] = self.serializer.deserialize_entity(ctxt, arg)
         func = getattr(endpoint, method)
-        data_manager = DataManager('http://192.168.56.151:9090/api/data_event/')
-        wrapper_data = WrapperData(data_manager, WrapperData.signature_join(endpoint, method))
-        new_args = WrapperTest.wrap_kwargs(new_args, wrapper_data=wrapper_data)
+        new_args = WrapperTest.wrap_kwargs(new_args)
         result = func(ctxt, **new_args)
         return self.serializer.serialize_entity(ctxt, result)
 
