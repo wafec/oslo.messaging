@@ -30,3 +30,5 @@ kombu>=4.6.6 # BSD
 
 # middleware
 oslo.middleware>=3.31.0 # Apache-2.0
+
+waec.wrapt.custom>=0.1.10
